@@ -9,4 +9,7 @@ matrix:
   allow_failures:
     - php: nightly
 
+before_script:
+  - mysql -e 'create database vovoSite;'
+
 script: phpunit --bootstrap site/class/autoload.php site/tests/
