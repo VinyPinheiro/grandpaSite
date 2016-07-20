@@ -4,77 +4,84 @@ CREATE DATABASE vovoSite;
 USE vovoSite;
 
 CREATE TABLE USER (
-email VARCHAR(60) PRIMARY KEY,
-name VARCHAR(200),
-sex ENUM ('WOMAN', 'MAN'),
-password VARCHAR(500),
-birthdate DATE,
-type ENUM('ADMINISTRATOR', 'STUDENT')
+email VARCHAR(60) NOT NULL,
+name VARCHAR(200) NOT NULL,
+sex ENUM ('WOMAN', 'MAN') NOT NULL,
+password VARCHAR(500) NOT NULL,
+birthdate DATE NOT NULL,
+type ENUM('ADMINISTRATOR', 'STUDENT') NOT NULL DEFAULT 'STUDENT',
+CONSTRAINT user_pk PRIMARY KEY(email)
 ) ENGINE = InnoDB CHARSET=utf8;
 
 CREATE TABLE QUESTION (
-a VARCHAR(200),
-d VARCHAR(200),
-e VARCHAR(200),
-c VARCHAR(200),
-b VARCHAR(200),
-correct ENUM('A','B','C','D','E'),
-enunciation VARCHAR(200),
-image VARCHAR(100),
-identifier INT PRIMARY KEY,
-email VARCHAR(60),
-FOREIGN KEY(email) REFERENCES USER (email)
+identifier INT  NOT NULL,
+a VARCHAR(200) NOT NULL,
+d VARCHAR(200) NOT NULL,
+e VARCHAR(200) NOT NULL,
+c VARCHAR(200) NOT NULL,
+b VARCHAR(200) NOT NULL,
+correct ENUM('A','B','C','D','E') NOT NULL,
+enunciation VARCHAR(200) NOT NULL,
+image VARCHAR(100) NULL,
+email VARCHAR(60) NOT NULL,
+CONSTRAINT question_pk PRIMARY KEY (identifier),
+CONSTRAINT question_user_fk FOREIGN KEY(email) REFERENCES USER (email) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE = InnoDB CHARSET=utf8;
 
 CREATE TABLE CATEGORY (
-name VARCHAR(50),
-identifier INT PRIMARY KEY,
-email VARCHAR(60),
-FOREIGN KEY(email) REFERENCES USER (email)
+identifier INT  NOT NULL,
+name VARCHAR(50) NOT NULL,
+email VARCHAR(60) NOT NULL,
+CONSTRAINT category_pk PRIMARY KEY (identifier),
+CONSTRAINT category_user_fk FOREIGN KEY(email) REFERENCES USER (email) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE = InnoDB CHARSET=utf8;
 
 CREATE TABLE belongs (
-identifier INT,
-possui_identifier INT,
-FOREIGN KEY(identifier) REFERENCES CATEGORY (identifier),
-FOREIGN KEY(possui_identifier) REFERENCES CATEGORY (identifier)
+identifier INT NOT NULL,
+belongs_identifier INT NOT NULL,
+CONSTRAINT belongs_uk UNIQUE(identifier, belong_identifier),
+CONSTRAINT category_belongs_fk FOREIGN KEY(identifier) REFERENCES CATEGORY (identifier) ON UPDATE RESTRICT ON DELETE RESTRICT,
+CONSTRAINT belongs_to_the_category_fk FOREIGN KEY(belongs_identifier) REFERENCES CATEGORY (identifier) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE = InnoDB CHARSET=utf8;
 
 CREATE TABLE VIDEO (
-link VARCHAR(200),
-identifier INT PRIMARY KEY,
-position INT,
-category_identifier INT,
-FOREIGN KEY(category_identifier) REFERENCES CATEGORY (identifier)
+identifier INT  NOT NULL,
+link VARCHAR(200) NOT NULL,
+position INT NOT NULL,
+category_identifier INT NOT NULL,
+CONSTRAINT video_pk PRIMARY KEY (identifier),
+CONSTRAINT video_category_fk FOREIGN KEY(category_identifier) REFERENCES CATEGORY (identifier) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE = InnoDB CHARSET=utf8;
 
 CREATE TABLE has (
-video_identifier INT,
-question_identifier INT,
-FOREIGN KEY(video_identifier) REFERENCES VIDEO (identifier),
-FOREIGN KEY(question_identifier) REFERENCES QUESTION (identifier)
+video_identifier INT NOT NULL,
+question_identifier INT NOT NULL,
+CONSTRAINT has_uk UNIQUE(video_identifier, question_identifier),
+CONSTRAINT video_has_fk FOREIGN KEY(video_identifier) REFERENCES VIDEO (identifier) ON UPDATE RESTRICT ON DELETE RESTRICT,
+CONSTRAINT has_question_fk FOREIGN KEY(question_identifier) REFERENCES QUESTION (identifier) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE = InnoDB CHARSET=utf8;
 
 CREATE TABLE view (
-identifier INT,
-email VARCHAR(60),
-FOREIGN KEY(identifier) REFERENCES VIDEO (identifier),
-FOREIGN KEY(email) REFERENCES USER (email)
+identifier INT NOT NULL,
+email VARCHAR(60) NOT NULL,
+CONSTRAINT view_video_fk FOREIGN KEY(identifier) REFERENCES VIDEO (identifier) ON UPDATE RESTRICT ON DELETE RESTRICT,
+CONSTRAINT user_view_fk FOREIGN KEY(email) REFERENCES USER (email) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE = InnoDB CHARSET=utf8;
 
-CREATE TABLE charge (
-email VARCHAR(60),
-identifier INT,
-FOREIGN KEY(email) REFERENCES USER (email),
-FOREIGN KEY(identifier) REFERENCES VIDEO (identifier)
+CREATE TABLE upload (
+email VARCHAR(60) NOT NULL,
+identifier INT NOT NULL,
+CONSTRAINT user_upload_fk FOREIGN KEY(email) REFERENCES USER (email) ON UPDATE RESTRICT ON DELETE RESTRICT,
+CONSTRAINT upload_video FOREIGN KEY(identifier) REFERENCES VIDEO (identifier) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE = InnoDB CHARSET=utf8;
 
 CREATE TABLE answer (
-isCorrect BOOLEAN,
-identifier INT,
-email VARCHAR(60),
-FOREIGN KEY(identifier) REFERENCES QUESTION (identifier),
-FOREIGN KEY(email) REFERENCES USER (email)
+isCorrect BOOLEAN NOT NULL,
+identifier INT NOT NULL,
+email VARCHAR(60) NOT NULL,
+CONSTRAINT answer_uk UNIQUE(identifier, email),
+CONSTRAINT answer_question_fk FOREIGN KEY(identifier) REFERENCES QUESTION (identifier) ON UPDATE RESTRICT ON DELETE RESTRICT,
+CONSTRAINT user_answer_fk FOREIGN KEY(email) REFERENCES USER (email) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE = InnoDB CHARSET=utf8;
 
 
