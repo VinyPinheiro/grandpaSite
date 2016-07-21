@@ -14,3 +14,6 @@ before_script:
 script: 
   - mysql -u root < databaseDocumentation/physical.sql
   - phpunit --bootstrap site/class/autoload.php site/tests/
+
+notifications:
+  - never
