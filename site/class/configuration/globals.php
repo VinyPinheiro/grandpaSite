@@ -13,7 +13,7 @@ class Globals{
 	 */
 	public static function criptograph($value)
 	{
-		$options = ['cost' => 10,'salt' => 'BCryptRequires22Chrcts',]; // Define coast and salt for cryptography
+		$options = ['cost' => 10]; // Define coast for cryptography
 		
 		return password_hash($value, PASSWORD_BCRYPT, $options);
 	}
