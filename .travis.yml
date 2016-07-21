@@ -10,6 +10,6 @@ matrix:
     - php: nightly
 
 before_script:
-  - mysql -e 'create database vovoSite;'
+  - mysql -u root < databaseDocumentation/physical.sql
 
 script: phpunit --bootstrap site/class/autoload.php site/tests/
