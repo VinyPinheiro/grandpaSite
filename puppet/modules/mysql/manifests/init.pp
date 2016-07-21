@@ -17,14 +17,14 @@ class phpmyadmin {
 	require => Package['apache2'],
     }
 
-	exec{ 'cp /vagrant/config.inc.php /etc/phpmyadmin/config.inc.php':
-	command => 'cp /vagrant/config.inc.php /etc/phpmyadmin/config.inc.php',
+	exec{ 'cp /vagrant/config/config.inc.php /etc/phpmyadmin/config.inc.php':
+	command => 'cp /vagrant/config/config.inc.php /etc/phpmyadmin/config.inc.php',
 	notify  => Service['apache2'], 
 	require => Package['phpmyadmin'],
 	}
 
-	exec{ 'mysql -u root < /vagrant/database.sql':
-	command => 'mysql -u root < /vagrant/database.sql',
+	exec{ 'mysql -u root < /vagrant/databaseDocumentation/physical.sql':
+	command => 'mysql -u root < /vagrant/databaseDocumentation/physical.sql',
 	require => Package['mysql-server'],
 	}
 
