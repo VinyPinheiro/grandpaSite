@@ -39,7 +39,7 @@ CONSTRAINT category_user_fk FOREIGN KEY(email) REFERENCES USER (email) ON UPDATE
 CREATE TABLE belongs (
 identifier INT NOT NULL,
 belongs_identifier INT NOT NULL,
-CONSTRAINT belongs_uk UNIQUE(identifier, belong_identifier),
+CONSTRAINT belongs_uk UNIQUE(identifier, belongs_identifier),
 CONSTRAINT category_belongs_fk FOREIGN KEY(identifier) REFERENCES CATEGORY (identifier) ON UPDATE RESTRICT ON DELETE RESTRICT,
 CONSTRAINT belongs_to_the_category_fk FOREIGN KEY(belongs_identifier) REFERENCES CATEGORY (identifier) ON UPDATE RESTRICT ON DELETE RESTRICT
 ) ENGINE = InnoDB CHARSET=utf8;
