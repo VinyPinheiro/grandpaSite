@@ -4,6 +4,8 @@
  * class to create a user object
  */
  
+require_once('class/configuration/globals.php');
+ 
 class UserModel
 {
 	/* Class atrributes */

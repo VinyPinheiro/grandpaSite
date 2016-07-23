@@ -5,96 +5,107 @@
  
 class QuestionModelTest extends PHPUnit_Framework_TestCase
 {
-	private $user;
-	private $image_default_path;
-	
-	public function setUp()
-	{
-		$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","123456789","1995-02-14","MAN","ADMINISTRATOR");
-		$image_default_path = realpath('.') . '/user_image/default.png';
-	}
+	private static $user;
+	private static $image_default_path;
+
+
+    protected function setUp()
+    {
+        self::$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","123456789","1995-02-14","MAN","ADMINISTRATOR");
+		self::$image_default_path = realpath('.') . '/user_image/default.png';
+    }
 	
 	public function testCreateValidQuestion()
 	{
-		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E");
+		$question = new QuestionModel(self::$user,"Enunciado1","a","b","c","d","e","E");
 	}
 	
 	public function testCreateValidQuestionWithFilePath()
 	{
-		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E",$this->image_default_path);
+		$question = new QuestionModel(self::$user,"Enunciado1","a","b","c","d","e","E",self::$image_default_path);
 	}
 	
 	public function testCreateValidQuestionWithFilePathAndIdentifier()
 	{
-		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E",$this->image_default_path,5);
+		$question = new QuestionModel(self::$user,"Enunciado1","a","b","c","d","e","E",self::$image_default_path,5);
 	}
 	
 	public function testCreateValidQuestionWithFilePathNULLAndIdentifier()
 	{
-		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E",NULL,5);
+		$question = new QuestionModel(self::$user,"Enunciado1","a","b","c","d","e","E",NULL,5);
 	}
 	
 	/**
 	* @expectedException QuestionModelException
-	* @expectedExceptionMessage Identificador da questão invalido.
+	* @expectedExceptionMessage QuestionModel::INVALID_IDENTIFIER
 	*/
 	public function testWithInvalidIdentifier()
 	{
-		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E",NULL,"qqq");
+		$question = new QuestionModel(self::$user,"Enunciado1","a","b","c","d","e","E",NULL,"qqq");
 	}
 	
 	/**
 	* @expectedException QuestionModelException
-	* @expectedExceptionMessage O enunciado não pode ser nulo ou vazio.
+	* @expectedExceptionMessage QuestionModel::NULL_ENUNCIATE
 	*/
 	public function testWithEmptyEnunciate()
 	{
-		$question = new QuestionModel($this->user,"","a","b","c","d","e","E",NULL,NULL);
+		$question = new QuestionModel(self::$user,"","a","b","c","d","e","E",NULL,NULL);
 	}
 	
 	/**
 	* @expectedException QuestionModelException
-	* @expectedExceptionMessage O enunciado não pode ser nulo ou vazio.
+	* @expectedExceptionMessage QuestionModel::NULL_ENUNCIATE
 	*/
 	public function testWithNullEnunciate()
 	{
-		$question = new QuestionModel($this->user,NULL,"a","b","c","d","e","E",NULL,NULL);
+		$question = new QuestionModel(self::$user,NULL,"a","b","c","d","e","E",NULL,NULL);
 	}
 	
 	/**
 	* @expectedException QuestionModelException
-	* @expectedExceptionMessage Imagem não encontrada.
+	* @expectedExceptionMessage QuestionModel::INVALID_PATCH
 	*/
 	public function testWithWrongPath_especialCharacters()
 	{
-		$question = new QuestionModel($this->user,"Enunciado","a","b","c","d","e","E","sdf#/asd/asd",NULL);
+		$question = new QuestionModel(self::$user,"Enunciado","a","b","c","d","e","E","sdf#/asd/asd",NULL);
 	}
 	
 	/**
 	* @expectedException QuestionModelException
-	* @expectedExceptionMessage Alternativa Correta invalida.
+	* @expectedExceptionMessage QuestionModel::INVALID_CORRECT_ALTERNATIVE
 	*/
 	public function testWithInvalidCorrectAnswer()
 	{
-		$question = new QuestionModel($this->user,"Enunciado","a","b","c","d","e","Q",$this->image_default_path,NULL);
+		$question = new QuestionModel(self::$user,"Enunciado","a","b","c","d","e","Q",self::$image_default_path,NULL);
 	}
 	
 	/**
 	* @expectedException QuestionModelException
-	* @expectedExceptionMessage Alternativa Correta invalida.
+	* @expectedExceptionMessage QuestionModel::INVALID_CORRECT_ALTERNATIVE
 	*/
 	public function testWithNULLCorrectAnswer()
 	{
-		$question = new QuestionModel($this->user,"Enunciado","a","b","c","d","e",NULL,$this->image_default_path,NULL);
+		$question = new QuestionModel(self::$user,"Enunciado","a","b","c","d","e",NULL,self::$image_default_path,NULL);
 	}
 	
 	/**
 	* @expectedException QuestionModelException
-	* @expectedExceptionMessage Alternativa Correta invalida.
+	* @expectedExceptionMessage QuestionModel::INVALID_CORRECT_ALTERNATIVE
 	*/
 	public function testWithEmptyCorrectAnswer()
 	{
-		$question = new QuestionModel($this->user,"Enunciado","a","b","c","d","e","",$this->image_default_path,NULL);
+		$question = new QuestionModel(self::$user,"Enunciado","a","b","c","d","e","",self::$image_default_path,NULL);
+	}
+	
+	
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage QuestionModel::INVALID_OWNER
+	*/
+	public function testWithInvalidOwner()
+	{
+		$question = new QuestionModel(null,"Enunciado","a","b","c","d","e","A",self::$image_default_path,NULL);
 	}
 }
 

@@ -4,6 +4,8 @@
  * class to create a question object
  */
  
+require_once('class/model/userModel.php');
+
 class QuestionModel
 {
 	/* Class attributes */
@@ -25,6 +27,8 @@ class QuestionModel
 	const NULL_ENUNCIATE = "O enunciado não pode ser nulo ou vazio.";
 	const INVALID_PATCH = "Imagem não encontrada.";
 	const INVALID_CORRECT_ALTERNATIVE = "Alternativa Correta invalida.";
+	const OWNER_NO_HAVE_PRIVILEGES = "Usuário não tem privilégios suficientes";
+	const INVALID_OWNER = "Dono deve ser um objeto do tipo Usuário.";
 			
 	/*Methods*/
 	
@@ -69,6 +73,7 @@ class QuestionModel
 			throw new QuestionModelException(self::INVALID_IDENTIFIER);
 		}
 	}
+	
 	private function setEnunciate($enunciate)
 	{
 		//Remove Spaces
@@ -83,6 +88,7 @@ class QuestionModel
 			throw new QuestionModelException(self::NULL_ENUNCIATE);
 		}
 	}
+	
 	private function setImagePath($image_path)
 	{
 		$image_path = trim($image_path);
@@ -116,9 +122,24 @@ class QuestionModel
 				throw new QuestionModelException(self::INVALID_CORRECT_ALTERNATIVE);
 		}
 	}
+	
 	private function setOwner($owner)
-	{
-		$this->owner = $owner;
+	{		
+		if(get_class($owner) == "UserModel")
+		{
+			if($owner->getType() == "ADMINISTRATOR")
+			{
+				$this->owner = $owner;
+			}
+			else
+			{
+				throw new QuestionModelException(self::OWNER_NO_HAVE_PRIVILEGES);
+			}
+		}
+		else
+		{
+			throw new QuestionModelException(self::INVALID_OWNER);
+		}
 	}
 	
 	/**
@@ -146,6 +167,10 @@ class QuestionModel
 				$this->alternative_E = $alternative;
 			break;
 		}
+	}
+	public function getOwner()
+	{
+		return $this->owner;
 	}
 }
 
