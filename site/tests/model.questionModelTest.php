@@ -69,5 +69,32 @@ class QuestionModelTest extends PHPUnit_Framework_TestCase
 	{
 		$question = new QuestionModel($this->user,"Enunciado","a","b","c","d","e","E","sdf#/asd/asd",NULL);
 	}
+	
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage Alternativa Correta invalida.
+	*/
+	public function testWithInvalidCorrectAnswer()
+	{
+		$question = new QuestionModel($this->user,"Enunciado","a","b","c","d","e","Q",$this->image_default_path,NULL);
+	}
+	
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage Alternativa Correta invalida.
+	*/
+	public function testWithNULLCorrectAnswer()
+	{
+		$question = new QuestionModel($this->user,"Enunciado","a","b","c","d","e",NULL,$this->image_default_path,NULL);
+	}
+	
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage Alternativa Correta invalida.
+	*/
+	public function testWithEmptyCorrectAnswer()
+	{
+		$question = new QuestionModel($this->user,"Enunciado","a","b","c","d","e","",$this->image_default_path,NULL);
+	}
 }
 

@@ -24,6 +24,7 @@ class QuestionModel
 	const INVALID_IDENTIFIER = "Identificador da questão invalido.";
 	const NULL_ENUNCIATE = "O enunciado não pode ser nulo ou vazio.";
 	const INVALID_PATCH = "Imagem não encontrada.";
+	const INVALID_CORRECT_ALTERNATIVE = "Alternativa Correta invalida.";
 			
 	/*Methods*/
 	
@@ -102,9 +103,18 @@ class QuestionModel
 			}
 		}
 	}
+	
 	private function setCorrectLetter($correct_letter)
 	{
-		$this->correct_letter = $correct_letter;
+		$correct_letter = strtoupper($correct_letter);
+		if(in_array($correct_letter, array('A','B','C','D','E')))
+		{
+			$this->correct_letter = $correct_letter;
+		}
+		else
+		{
+				throw new QuestionModelException(self::INVALID_CORRECT_ALTERNATIVE);
+		}
 	}
 	private function setOwner($owner)
 	{
