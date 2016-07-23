@@ -23,6 +23,7 @@ class QuestionModel
 	
 	const INVALID_IDENTIFIER = "Identificador da questão invalido.";
 	const NULL_ENUNCIATE = "O enunciado não pode ser nulo ou vazio.";
+	const INVALID_PATCH = "Imagem não encontrada.";
 			
 	/*Methods*/
 	
@@ -41,7 +42,7 @@ class QuestionModel
 	public function __construct($owner,$enunciate, $alternative_A, 
 							$alternative_B, $alternative_C, $alternative_D, 
 							$alternative_E, $correct_letter,
-							$image_path = NULL, $identifier = NULL)
+							$image_path = "", $identifier = NULL)
 	{
 		$this->setIdentifier($identifier);
 		$this->setEnunciate($enunciate);
@@ -83,7 +84,23 @@ class QuestionModel
 	}
 	private function setImagePath($image_path)
 	{
-		$this->image_path = $image_path;
+		$image_path = trim($image_path);
+		
+		if($image_path == NULL)
+		{
+			//Define Default image
+			$this->image_path = realpath('.') . '/user_image/default.png';
+		}
+		else
+		{
+			if(file_exists($image_path)) 
+			{
+				$this->image_path = $image_path;
+			}else
+			{
+				throw new QuestionModelException(self::INVALID_PATCH);
+			}
+		}
 	}
 	private function setCorrectLetter($correct_letter)
 	{
