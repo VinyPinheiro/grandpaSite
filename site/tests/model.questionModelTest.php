@@ -28,6 +28,17 @@ class QuestionModelTest extends PHPUnit_Framework_TestCase
 	public function testCreateValidQuestionWithFilePathAndIdentifier()
 	{
 		$question = new QuestionModel(self::$user,"Enunciado1","a","b","c","d","e","E",self::$image_default_path,5);
+		
+		assert ($question->getOwner() == self::$user,"Expected equals owners");
+		assert ($question->getEnunciate() == "Enunciado1","Expected equals enunciate");
+		assert ($question->getAlternative_A() == "a","Expected equals Alternative A");
+		assert ($question->getAlternative_B() == "b","Expected equals Alternative B");
+		assert ($question->getAlternative_C() == "c","Expected equals Alternative C");
+		assert ($question->getAlternative_D() == "d","Expected equals Alternative D");
+		assert ($question->getAlternative_E() == "e","Expected equals Alternative E");
+		assert ($question->getCorrectLetter() == "E","Expected equals Correct answer");
+		assert ($question->getImagePath() == self::$image_default_path,"Expected equals image path");
+		assert ($question->getIdentifier() == 5,"Expected equals identifier");
 	}
 	
 	public function testCreateValidQuestionWithFilePathNULLAndIdentifier()
@@ -126,6 +137,51 @@ class QuestionModelTest extends PHPUnit_Framework_TestCase
 	public function testWithOwnerIsnTObject()
 	{
 		$question = new QuestionModel("owner","Enunciado","a","b","c","d","e","A",self::$image_default_path,NULL);
+	}	
+	
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage QuestionModel::NULL_ALTERNATIVE
+	*/
+	public function testWithAlternativeAInvalid()
+	{
+		$question = new QuestionModel(self::$user,"Enunciado","","b","c","d","e","A",self::$image_default_path,NULL);
+	}
+		
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage QuestionModel::NULL_ALTERNATIVE
+	*/
+	public function testWithAlternativeBInvalid()
+	{
+		$question = new QuestionModel(self::$user,"Enunciado","a","","c","d","e","A",self::$image_default_path,NULL);
+	}
+		
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage QuestionModel::NULL_ALTERNATIVE
+	*/
+	public function testWithAlternativeCInvalid()
+	{
+		$question = new QuestionModel(self::$user,"Enunciado","a","b","","d","e","A",self::$image_default_path,NULL);
+	}
+		
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage QuestionModel::NULL_ALTERNATIVE
+	*/
+	public function testWithAlternativeDInvalid()
+	{
+		$question = new QuestionModel(self::$user,"Enunciado","a","b","c","","e","A",self::$image_default_path,NULL);
+	}
+		
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage QuestionModel::NULL_ALTERNATIVE
+	*/
+	public function testWithAlternativeEInvalid()
+	{
+		$question = new QuestionModel(self::$user,"Enunciado","a","b","c","d","","A",self::$image_default_path,NULL);
 	}
 }
 

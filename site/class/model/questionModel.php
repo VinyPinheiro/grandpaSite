@@ -30,7 +30,9 @@ class QuestionModel
 	const OWNER_NO_HAVE_PRIVILEGES = "Usuário não tem privilégios suficientes";
 	const INVALID_OWNER = "Dono deve ser um objeto do tipo Usuário.";
 	const OWNER_ISNT_OBJECT = "Dono deve ser um objeto.";
-			
+	const INVALID_LETTER = "Letra invalida, apenas A,B,C,D ou E.";
+	const NULL_ALTERNATIVE = "O texto da alternativa não pode ser nulo ou vazio.";
+	
 	/*Methods*/
 	
 	/**
@@ -155,30 +157,76 @@ class QuestionModel
 	 * @param alternative string with the value of alternative
 	 * @param letter string contain A or B or C or D or E, letter with the correspondent alternative
 	 */
-	private function setAlternative($alternative, $tipe)
+	private function setAlternative($alternative, $letter)
 	{
-		switch($tipe)
+		if($alternative != NULL || $alternative != "")
 		{
-			case 'A':
-				$this->alternative_A = $alternative;
-			break;
-			case 'B':
-				$this->alternative_B = $alternative;
-			break;
-			case 'C':
-				$this->alternative_C = $alternative;
-			break;
-			case 'D':
-				$this->alternative_D = $alternative;
-			break;
-			case 'E':
-				$this->alternative_E = $alternative;
-			break;
+			switch($letter)
+			{
+				case 'A':
+					$this->alternative_A = $alternative;
+				break;
+				case 'B':
+					$this->alternative_B = $alternative;
+				break;
+				case 'C':
+					$this->alternative_C = $alternative;
+				break;
+				case 'D':
+					$this->alternative_D = $alternative;
+				break;
+				case 'E':
+					$this->alternative_E = $alternative;
+				break;
+				default:
+					throw new QuestionModelException(self::INVALID_LETTER);
+			}
+		}
+		else
+		{
+			throw new QuestionModelException(self::NULL_ALTERNATIVE);
 		}
 	}
+	
 	public function getOwner()
 	{
 		return $this->owner;
+	}	
+	public function getIdentifier()
+	{
+		return $this->identifier;
+	}	
+	public function getCorrectLetter()
+	{
+		return $this->correct_letter;
+	}	
+	public function getEnunciate()
+	{
+		return $this->enunciate;
+	}	
+	public function getImagePath()
+	{
+		return $this->image_path;
+	}	
+	public function getAlternative_A()
+	{
+		return $this->alternative_A;
+	}
+	public function getAlternative_B()
+	{
+		return $this->alternative_B;
+	}
+	public function getAlternative_C()
+	{
+		return $this->alternative_C;
+	}
+	public function getAlternative_D()
+	{
+		return $this->alternative_D;
+	}
+	public function getAlternative_E()
+	{
+		return $this->alternative_E;
 	}
 }
 
