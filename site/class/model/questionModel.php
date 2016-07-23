@@ -29,6 +29,7 @@ class QuestionModel
 	const INVALID_CORRECT_ALTERNATIVE = "Alternativa Correta invalida.";
 	const OWNER_NO_HAVE_PRIVILEGES = "Usuário não tem privilégios suficientes";
 	const INVALID_OWNER = "Dono deve ser um objeto do tipo Usuário.";
+	const OWNER_ISNT_OBJECT = "Dono deve ser um objeto.";
 			
 	/*Methods*/
 	
@@ -124,21 +125,28 @@ class QuestionModel
 	}
 	
 	private function setOwner($owner)
-	{		
-		if(get_class($owner) == "UserModel")
+	{
+		if(is_object($owner))
 		{
-			if($owner->getType() == "ADMINISTRATOR")
+			if(get_class($owner) == "UserModel")
 			{
-				$this->owner = $owner;
+				if($owner->getType() == "ADMINISTRATOR")
+				{
+					$this->owner = $owner;
+				}
+				else
+				{
+					throw new QuestionModelException(self::OWNER_NO_HAVE_PRIVILEGES);
+				}
 			}
 			else
 			{
-				throw new QuestionModelException(self::OWNER_NO_HAVE_PRIVILEGES);
+				throw new QuestionModelException(self::INVALID_OWNER);
 			}
 		}
 		else
 		{
-			throw new QuestionModelException(self::INVALID_OWNER);
+			throw new QuestionModelException(self::OWNER_ISNT_OBJECT);
 		}
 	}
 	

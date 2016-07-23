@@ -105,7 +105,27 @@ class QuestionModelTest extends PHPUnit_Framework_TestCase
 	*/
 	public function testWithInvalidOwner()
 	{
-		$question = new QuestionModel(null,"Enunciado","a","b","c","d","e","A",self::$image_default_path,NULL);
+		$question1 = new QuestionModel(self::$user,"Enunciado1","a","b","c","d","e","E");
+		$question = new QuestionModel($question1,"Enunciado","a","b","c","d","e","A",self::$image_default_path,NULL);
+	}
+		
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage QuestionModel::OWNER_NO_HAVE_PRIVILEGES
+	*/
+	public function testWithNoPrivilegesOwner()
+	{
+		$user1 = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","123456789","1995-02-14","MAN","STUDENT");
+		$question = new QuestionModel($user1,"Enunciado","a","b","c","d","e","A",self::$image_default_path,NULL);
+	}
+	
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage QuestionModel::OWNER_ISNT_OBJECT
+	*/
+	public function testWithOwnerIsnTObject()
+	{
+		$question = new QuestionModel("owner","Enunciado","a","b","c","d","e","A",self::$image_default_path,NULL);
 	}
 }
 
