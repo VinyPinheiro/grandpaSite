@@ -22,17 +22,18 @@ class QuestionModel
 	/* Exceptions messengers */
 	
 	const INVALID_IDENTIFIER = "Identificador da questão invalido.";
+	const NULL_ENUNCIATE = "O enunciado não pode ser nulo ou vazio.";
 			
 	/*Methods*/
 	
 	/**
 	 * @param owner only UserModel class with the owner of the question. The user has Type administrator
-	 * @param enunciate only string no null
-	 * @param alternative_A only string no null
-	 * @param alternative_B only string no null
-	 * @param alternative_C only string no null
-	 * @param alternative_D only string no null
-	 * @param alternative_E only string no null
+	 * @param enunciate only string not null and not empty
+	 * @param alternative_A only string not null and not empty
+	 * @param alternative_B only string not null and not empty
+	 * @param alternative_C only string not null and not empty
+	 * @param alternative_D only string not null and not empty
+	 * @param alternative_E only string not null and not empty
 	 * @param correct_letter only A,B,C,D ou E value. Contain the correct answer
 	 * @param image_path only string with the path to a new image
 	 * @param identifier only number values
@@ -68,7 +69,17 @@ class QuestionModel
 	}
 	private function setEnunciate($enunciate)
 	{
-		$this->enunciate = $enunciate;
+		//Remove Spaces
+		$enunciate = trim($enunciate);
+		
+		if($enunciate != NULL && $enunciate != "")
+		{
+			$this->enunciate = $enunciate;
+		}
+		else
+		{
+			throw new QuestionModelException(self::NULL_ENUNCIATE);
+		}
 	}
 	private function setImagePath($image_path)
 	{

@@ -32,7 +32,6 @@ class QuestionModelTest extends PHPUnit_Framework_TestCase
 		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E",NULL,5);
 	}
 	
-	
 	/**
 	* @expectedException QuestionModelException
 	* @expectedExceptionMessage Identificador da questão invalido.
@@ -40,6 +39,24 @@ class QuestionModelTest extends PHPUnit_Framework_TestCase
 	public function testWithInvalidIdentifier()
 	{
 		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E",NULL,"qqq");
+	}
+	
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage O enunciado não pode ser nulo ou vazio.
+	*/
+	public function testWithEmptyEnunciate()
+	{
+		$question = new QuestionModel($this->user,"","a","b","c","d","e","E",NULL,NULL);
+	}
+	
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage O enunciado não pode ser nulo ou vazio.
+	*/
+	public function testWithNullEnunciate()
+	{
+		$question = new QuestionModel($this->user,NULL,"a","b","c","d","e","E",NULL,NULL);
 	}
 }
 
