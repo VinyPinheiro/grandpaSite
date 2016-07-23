@@ -5,10 +5,41 @@
  
 class QuestionModelTest extends PHPUnit_Framework_TestCase
 {
-	public function testCreateValidQuestion()
+	private $user;
+	
+	public function setUp()
 	{
 		$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","123456789","1995-02-14","MAN","ADMINISTRATOR");
-		$question = new QuestionModel($user,"Enunciado1","a","b","c","d","e","E");
+	}
+	
+	public function testCreateValidQuestion()
+	{
+		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E");
+	}
+	
+	public function testCreateValidQuestionWithFilePath()
+	{
+		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E","imagens/imagem1.jpg");
+	}
+	
+	public function testCreateValidQuestionWithFilePathAndIdentifier()
+	{
+		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E","imagens/imagem1.jpg",5);
+	}
+	
+	public function testCreateValidQuestionWithFilePathNULLAndIdentifier()
+	{
+		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E",NULL,5);
+	}
+	
+	
+	/**
+	* @expectedException QuestionModelException
+	* @expectedExceptionMessage Identificador da questão invalido.
+	*/
+	public function testWithInvalidIdentifier()
+	{
+		$question = new QuestionModel($this->user,"Enunciado1","a","b","c","d","e","E",NULL,"qqq");
 	}
 }
 

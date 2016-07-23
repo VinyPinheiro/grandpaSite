@@ -7,6 +7,7 @@
 class QuestionModel
 {
 	/* Class attributes */
+	
 	private $identifier; //Number with the identifier code for the question. If is a new question, this value is null.
 	private $alternative_A; // Not Null values and no greater than 200 caracters
 	private $alternative_B; // Not Null values and no greater than 200 caracters
@@ -16,8 +17,26 @@ class QuestionModel
 	private $enunciate; //Enunciate for the question
 	private $image_path; // Optional, path with the loaded image
 	private $correct_letter; //Only A,B,C,D or E, contain the correct answer
-	private $owner; //User who created the question 
+	private $owner; //User who created the question 	
 	
+	/* Exceptions messengers */
+	
+	const INVALID_IDENTIFIER = "Identificador da questão invalido.";
+			
+	/*Methods*/
+	
+	/**
+	 * @param owner only UserModel class with the owner of the question. The user has Type administrator
+	 * @param enunciate only string no null
+	 * @param alternative_A only string no null
+	 * @param alternative_B only string no null
+	 * @param alternative_C only string no null
+	 * @param alternative_D only string no null
+	 * @param alternative_E only string no null
+	 * @param correct_letter only A,B,C,D ou E value. Contain the correct answer
+	 * @param image_path only string with the path to a new image
+	 * @param identifier only number values
+	 */
 	public function __construct($owner,$enunciate, $alternative_A, 
 							$alternative_B, $alternative_C, $alternative_D, 
 							$alternative_E, $correct_letter,
@@ -38,7 +57,14 @@ class QuestionModel
 	/* Getters and setters */
 	private function setIdentifier($identifier)
 	{
-		$this->identifier = $identifier;
+		if(is_null($identifier) || is_numeric($identifier))
+		{
+			$this->identifier = $identifier;			
+		}
+		else
+		{
+			throw new QuestionModelException(self::INVALID_IDENTIFIER);
+		}
 	}
 	private function setEnunciate($enunciate)
 	{
@@ -86,7 +112,7 @@ class QuestionModel
 }
 
 
-class UserQuestionException extends Exception{
+class QuestionModelException extends Exception{
 	
 	public function __construct($message, $code = 0, Exception $previous = null) {
         parent::__construct($message, $code, $previous);
