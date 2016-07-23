@@ -4,7 +4,7 @@
  * class to create a user object
  */
  
-require_once('class/configuration/globals.php');
+require_once(realpath('.') . '/class/configuration/globals.php');
  
 class UserModel
 {

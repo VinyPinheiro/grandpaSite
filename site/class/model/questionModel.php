@@ -4,7 +4,7 @@
  * class to create a question object
  */
  
-require_once('class/model/userModel.php');
+require_once(realpath('.') . '/class/model/userModel.php');
 
 class QuestionModel
 {
