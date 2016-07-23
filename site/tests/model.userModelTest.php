@@ -124,6 +124,18 @@ class UserModelTest extends PHPUnit_Framework_TestCase
 		$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","01234567890123456789012345678901234567890","1995-02-14","MAN","STUDENT");
 	}
 	
+	public function testWithEncriptedPassword()
+	{
+		$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","$2y$10$9vrLr8EgCVvXHtEe8AqekeCyTTJakERw6eihlksz9q3toJMCHr5Ae","1995-02-14","MAN","STUDENT");
+		assert ($user->verifyPassword("senha"), "Diferents passwords");
+	}
+	
+	public function testWithEncriptedPasswordAndWrongComparation()
+	{
+		$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","$2y$10$9vrLr8EgCVvXHtEe8AqekeCyTTJakERw6eihlksz9q3toJMCHr5Ae","1995-02-14","MAN","STUDENT");
+		assert (!$user->verifyPassword("senhaa"), "Returned equals password, but the second is diferent");
+	}
+	
 	/**
 	* @expectedException UserModelException
 	* @expectedExceptionMessage Data não pode ser nula.
@@ -203,7 +215,7 @@ class UserModelTest extends PHPUnit_Framework_TestCase
 	{
 		$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","12345678","1995-02-14","WeMEN","STUDENT");
 	}
-	///////////////////////
+	
 	public function testStudentType()
 	{
 		$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","12345678","1995-02-14","MAN","STUDENT");
