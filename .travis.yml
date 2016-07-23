@@ -13,7 +13,8 @@ before_script:
 
 script: 
   - mysql -u root < databaseDocumentation/physical.sql
-  - phpunit --bootstrap site/class/autoload.php site/tests/
+  - cd site
+  - phpunit --bootstrap class/autoload.php tests/
 
 notifications:
   - never
