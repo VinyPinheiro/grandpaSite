@@ -17,6 +17,8 @@ class VideoModel
 	/* Exceptions messengers */
 	
 	const INVALID_IDENTIFIER = "Identificador da questão invalido.";
+	const NULL_LINK = "Link não pode ser nulo ou vazio.";
+	const LINK_GREAT_THAN_200 = "Link não pode ultrapassar 200 caracteres."; 
 
 	/* Methods */
 	
@@ -51,7 +53,23 @@ class VideoModel
 
 	private function setLink($link)
 	{
-		$this->link = $link;
+		$link = trim($link);
+		
+		if($link != NULL && $link != "")
+		{
+			if(strlen($link) <= 200)
+			{
+				$this->link = $link;
+			}
+			else
+			{
+				throw new VideoModelException(self::LINK_GREAT_THAN_200);
+			}
+		}
+		else
+		{
+			throw new VideoModelException(self::NULL_LINK);
+		}
 	}
 
 	private function setPosition($position)

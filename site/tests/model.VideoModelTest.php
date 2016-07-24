@@ -21,6 +21,21 @@ class VideoModelTest extends PHPUnit_Framework_TestCase
 	{
 		$video = new VideoModel("IblBGfLhztk",1,1, self::$questions);
 	}
+
+	public function testCreateValidVideoWithoutQuestions()
+	{
+		$video = new VideoModel("IblBGfLhztk",1,1);
+	}
+
+	public function testCreateValidVideoWithoutIdentifierAndQuestions()
+	{
+		$video = new VideoModel("IblBGfLhztk",1);
+	}
+
+	public function testCreateValidVideoWithoutIdentifier()
+	{
+		$video = new VideoModel("IblBGfLhztk",1,NULL, self::$questions);
+	}
 	
 	/**
 	* @expectedException VideoModelException
@@ -29,6 +44,34 @@ class VideoModelTest extends PHPUnit_Framework_TestCase
 	public function testWithInvalidIdentifier()
 	{
 		$video = new VideoModel("IblBGfLhztk",1,"as");
+	}
+
+	
+	/**
+	* @expectedException VideoModelException
+	* @expectedExceptionMessage VideoModel::NULL_LINK
+	*/
+	public function testWithEmptyLink()
+	{
+		$video = new VideoModel("",1,1, self::$questions);
+	}
+
+	/**
+	* @expectedException VideoModelException
+	* @expectedExceptionMessage VideoModel::NULL_LINK
+	*/
+	public function testWithNULLLink()
+	{
+		$video = new VideoModel(NULL,1,1, self::$questions);
+	}
+
+	/**
+	* @expectedException VideoModelException
+	* @expectedExceptionMessage VideoModel::LINK_GREAT_THAN_200
+	*/
+	public function testWithLinkGreatThan200()
+	{
+		$video = new VideoModel("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1,1, self::$questions);
 	}
 }
 
