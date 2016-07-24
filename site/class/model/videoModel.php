@@ -12,6 +12,7 @@ class VideoModel
 	private $identifier; //Number with the identifier code for the video. If is a new video, this value is null.
 	private $link; //String with the youtube video identifier. Not null value and less 200 caracters
 	private $position; //Only number with the position of video in the category
+	private $questions; //Array contain all question objects from this video
 	
 	/* Exceptions messengers */
 	
@@ -23,12 +24,14 @@ class VideoModel
 	 * @param identifier Number with the identifier code for the video. If is a new video, this value is null.
 	 * @param link String with the youtube video identifier. Not null value and less 200 caracters
 	 * @param position Only number with the position of video in the category
+	 * @param questions Array contain all question objects from this video, if no has question, this value is NULL
 	 */
-	public function __construct($link, $position, $identifier = NULL)
+	public function __construct($link, $position, $identifier = NULL, $questions = NULL)
 	{
 		$this->setIdentifier($identifier);	
 		$this->setLink($link);	
 		$this->setPosition($position);	
+		$this->setQuestions($questions);
 	}
 	
 	/* Getters and setters */
@@ -54,6 +57,11 @@ class VideoModel
 	private function setPosition($position)
 	{
 		$this->position = $position;
+	}
+
+	private function setQuestions($question)
+	{
+		$this->questions = $question;
 	}
 }
 
