@@ -104,7 +104,7 @@ class UserDAO extends DAO
 		//Verify if register exists
 		if($this->findByEmail($this->user_model->getEmail()) != NULL)
 		{
-			//parent::query("DELETE FROM USER WHERE email = '{$this->user_model->getEmail()}'");
+			parent::query("DELETE FROM USER WHERE email = '{$this->user_model->getEmail()}'");
 		}
 		else
 		{
@@ -127,12 +127,12 @@ class UserDAO extends DAO
 			}
 			else
 			{
-				throw new QuestionModelException(self::INVALID_MODEL, self::CLASS_EXCEPTION_CODE);
+				throw new DatabaseException(self::INVALID_MODEL, self::CLASS_EXCEPTION_CODE);
 			}
 		}
 		else
 		{
-			throw new QuestionModelException(self::USER_MODEL_ISNT_OBJECT, self::CLASS_EXCEPTION_CODE);
+			throw new DatabaseException(self::USER_MODEL_ISNT_OBJECT, self::CLASS_EXCEPTION_CODE);
 		}
 	}
 }

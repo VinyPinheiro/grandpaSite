@@ -5,71 +5,79 @@
  
 class userDaoTest extends PHPUnit_Framework_TestCase
 {
-	private $connection;
+	private $user_dao;
 	private static $user;
 	
-	public function setUp()
+	protected function setUp()
 	{
-        self::$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","123456789","1995-02-14","MAN","ADMINISTRATOR");
+        self::$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@abcd.com","123456789","1995-02-14","MAN","ADMINISTRATOR");
+        $this->user_dao = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
 	}
 	
-	public function testOpenConnection()
+	protected function tearDown()
 	{
-		$this->connection = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
+		try
+		{
+			$this->user_dao->delete();
+		}
+		catch(Exception $messenge)
+		{
+			// Nothing to do.
+		}
 	}
 	
 	/**
 	 * @expectedException DatabaseException
 	 * @expectedExceptionMessenger DAO::INVALID_HOST
 	 */
-	public function testOpenConnectionWithInvalidHost()
+	public function testOpenuser_daoWithInvalidHost()
 	{
-		$this->connection = new UserDAO("127.0.0.256", Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
+		$this->user_dao = new UserDAO("127.0.0.256", Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
 	}
 	
 	/**
 	 * @expectedException DatabaseException
 	 * @expectedExceptionMessenger DAO::NULL_HOST
 	 */
-	public function testOpenConnectionWithNullHost()
+	public function testOpenuser_daoWithNullHost()
 	{
-		$this->connection = new UserDAO(NULL, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
+		$this->user_dao = new UserDAO(NULL, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
 	}
 	
 	/**
 	 * @expectedException DatabaseException
 	 * @expectedExceptionMessenger DAO::NULL_HOST
 	 */
-	public function testOpenConnectionWithEmptyHost()
+	public function testOpenuser_daoWithEmptyHost()
 	{
-		$this->connection = new UserDAO("", Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
+		$this->user_dao = new UserDAO("", Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
 	}
 	
 	/**
 	 * @expectedException DatabaseException
 	 * @expectedExceptionMessenger DAO::NULL_USER
 	 */
-	public function testOpenConnectionWithEmptyUser()
+	public function testOpenuser_daoWithEmptyUser()
 	{
-		$this->connection = new UserDAO(Globals::HOST, "", Globals::PASSWORD, Globals::DATABASE,self::$user);
+		$this->user_dao = new UserDAO(Globals::HOST, "", Globals::PASSWORD, Globals::DATABASE,self::$user);
 	}
 	
 	/**
 	 * @expectedException DatabaseException
 	 * @expectedExceptionMessenger DAO::NULL_USER
 	 */
-	public function testOpenConnectionWithNullUser()
+	public function testOpenuser_daoWithNullUser()
 	{
-		$this->connection = new UserDAO(Globals::HOST, NULL, Globals::PASSWORD, Globals::DATABASE,self::$user);
+		$this->user_dao = new UserDAO(Globals::HOST, NULL, Globals::PASSWORD, Globals::DATABASE,self::$user);
 	}
 	
 	/**
 	 * @expectedException DatabaseException
 	 * @expectedExceptionMessenger DAO::NULL_USER
 	 */
-	public function testOpenConnectionWithNullDatabase()
+	public function testOpenuser_daoWithNullDatabase()
 	{
-		$this->connection = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, NULL,self::$user);
+		$this->user_dao = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, NULL,self::$user);
 	}
 	
 	/**
@@ -79,8 +87,8 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testFindUserByEmailForceWrongQuery()
 	{
-		$this->connection = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
-		$this->connection->findByEmail("viny-pinheiro@abc.com'jhg");
+		$this->user_dao = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
+		$this->user_dao->findByEmail("viny-pinheiro@abc.com'jhg");
 	}
 	
 	/**
@@ -88,10 +96,9 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifyMessageError()
 	{
-		$this->connection = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
 		try
 		{
-			$this->connection->findByEmail("viny-pinheiro@abc.com'jhg");
+			$this->user_dao->findByEmail("viny-pinheiro@abc.com'jhg");
 		}
 		catch(DatabaseException $message)
 		{
@@ -99,18 +106,62 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 		}
 	}
 	
-	
-	
 	/**
-	 * Locate data by email
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessenger UserDAO::USER_MODEL_ISNT_OBJECT	
 	 */
+	public function testCreateUserDaoWithNonObjectUserModel()
+	{
+		$this->user_dao = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,"Vinicius");
+	}
+
+	/**
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessenger UserDAO::INVALID_MODEL	
+	 */
+	public function testCreateUserDaoWithInvalidObject()
+	{
+		$this->user_dao = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,new mysqli());
+	}
+
 	public function testFindUserByEmail()
 	{
-		$this->connection = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
-		$this->connection->findByEmail("viny-pinheiro@abc.com");
+		$this->user_dao->findByEmail("viny-pinheiro@abc.com");
 	}
 	
+	/**
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessenger UserDAO::NULL_EMAIL
+	 */
+	public function testFindUserByNullEmail()
+	{
+		$this->user_dao->findByEmail(NULL);
+	}
 	
+	public function testRegisterUser()
+	{
+		$this->user_dao->register();
+		assert($this->user_dao->findByEmail(self::$user->getEmail()), "Expected two equals emails");
+		$this->user_dao->delete();
+	}
 	
+	/**
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessenger UserDAO::EXISTENT_EMAIL
+	 */
+	public function testRegisterDuplicatedUser()
+	{
+		$this->user_dao->register();
+		$this->user_dao->register();
+	}
+	
+	/**
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessenger UserDAO::NOT_EXISTENT_EMAIL
+	 */
+	public function testDeleteNonExistentUser()
+	{
+		$this->user_dao->delete();
+	}
 }
 
