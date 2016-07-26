@@ -73,5 +73,29 @@ class VideoModelTest extends PHPUnit_Framework_TestCase
 	{
 		$video = new VideoModel("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",1,1, self::$questions);
 	}
+	
+	/**
+	* @expectedException VideoModelException
+	* @expectedExceptionMessage VideoModel::ONLY_UNSIGNED_VALUE
+	*/
+	public function testSignedPosition()
+	{
+		$video = new VideoModel("IblBGfLhztk",-1,1, self::$questions);
+	}
+	
+	/**
+	* @expectedException VideoModelException
+	* @expectedExceptionMessage VideoModel::ONLY_NUMERIC_NUMBER
+	*/
+	public function testNonNumericPosition()
+	{
+		$video = new VideoModel("IblBGfLhztk","AA",1, self::$questions);
+	}
+	
+	public function testStringNumericPosition()
+	{
+		$video = new VideoModel("IblBGfLhztk","1",1, self::$questions);
+	}
+
 }
 

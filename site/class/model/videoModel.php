@@ -18,7 +18,9 @@ class VideoModel
 	
 	const INVALID_IDENTIFIER = "Identificador da questão invalido.";
 	const NULL_LINK = "Link não pode ser nulo ou vazio.";
-	const LINK_GREAT_THAN_200 = "Link não pode ultrapassar 200 caracteres."; 
+	const LINK_GREAT_THAN_200 = "Link não pode ultrapassar 200 caracteres.";
+	const ONLY_UNSIGNED_VALUE = "Apenas valores positivos.";
+	const ONLY_NUMERIC_NUMBER = "Apenas valores numéricos.";
 
 	/* Methods */
 	
@@ -74,7 +76,22 @@ class VideoModel
 
 	private function setPosition($position)
 	{
-		$this->position = $position;
+		if(is_numeric($position))
+		{
+			$position = intval($position);
+			if($position >= 0)
+			{
+				$this->position = $position;
+			}
+			else
+			{
+				throw new VideoModelException(self::ONLY_UNSIGNED_VALUE);
+			}
+		}
+		else
+		{
+			throw new VideoModelException(self::ONLY_NUMERIC_NUMBER);
+		}
 	}
 
 	private function setQuestions($question)
