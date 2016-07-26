@@ -6,12 +6,17 @@
 class userDaoTest extends PHPUnit_Framework_TestCase
 {
 	private $user_dao;
+	private $user_dao2;
 	private static $user;
+	private static $user2;
 	
 	protected function setUp()
 	{
         self::$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@abcd.com","123456789","1995-02-14","MAN","ADMINISTRATOR");
         $this->user_dao = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
+        
+        self::$user2 = new UserModel("Vinicius Pinheiro","viny-pinheiro@abcdef.com","123456789","1995-02-14","MAN","ADMINISTRATOR");
+        $this->user_dao2 = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user2);
 	}
 	
 	protected function tearDown()
@@ -19,6 +24,14 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 		try
 		{
 			$this->user_dao->delete();
+		}
+		catch(Exception $messenge)
+		{
+			// Nothing to do.
+		}
+		try
+		{
+			$this->user_dao2->delete();
 		}
 		catch(Exception $messenge)
 		{
@@ -169,14 +182,45 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	 * @expectedExceptionMessenger UserDAO::NOT_EXISTENT_EMAIL
 	 */
 	public function testUpdateUserWithoutChangeEmailButEmailNotInDatabases()
-	{
-		$this->user_dao->update(new UserModel("Vinicius Pinheiro da Silva","viny-pinheiro@abcd.com","123456789","1995-02-14","MAN","ADMINISTRATOR"));
+	{		
+        $user = new UserModel("Vinicius Pinheiro da Silva","viny-pinheiro@abcd.com","123456789","1995-02-14","MAN","ADMINISTRATOR");
+		$this->user_dao->update($user);
 	}
 	
 	public function testUpdateUserWithoutChangeEmail()
 	{
+		$this->user_dao->register(); 
+		$user = new UserModel("Vinicius Pinheiro da Silva","viny-pinheiro@abcd.com","123456789","1995-02-14","MAN","ADMINISTRATOR");
+		$this->user_dao->update($user);
+	}
+	
+	public function testUpdateUserWithChangedEmail()
+	{
 		$this->user_dao->register();
-		$this->user_dao->update(new UserModel("Vinicius Pinheiro da Silva","viny-pinheiro@abcd.com","123456789","1995-02-14","MAN","ADMINISTRATOR"));
+		$this->user_dao->update(self::$user2);
+	}
+	
+	/**
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessenger UserDAO::NOT_EXISTENT_EMAIL
+	 */
+	public function testUpdateUserWithChangeEmailButOldEmailNotInDatabases()
+	{
+		$this->user_dao->update(self::$user2);
+	}
+	
+	/**
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessenger UserDAO::EXISTENT_EMAIL
+	 */
+	public function testUpdateUserWithChangeEmailButNewEmailInDatabases()
+	{
+		$this->user_dao->register();
+		$this->user_dao2->register();
+		
+		$this->user_dao->update(self::$user2);
+		
+		
 	}
 }
 

@@ -125,16 +125,23 @@ class UserDAO extends DAO
 		}
 		else
 		{
-			//Save old user data
-			$old_user_model = $this->user_model();
-			
-			//Save data from new user
-			$this->setUserModel($new_user);
-			$this->register();
-			
-			//Remove old user
-			$this->setUserModel($old_user_model);
-			$this->delete();
+			if($this->findByEmail($this->user_model->getEmail()) != NULL)
+			{
+				if($this->findByEmail($new_user->getEmail()) == NULL)
+				{
+					parent::query("UPDATE USER SET name = '{$new_user->getName()}', sex = '{$new_user->getSex()}'," .
+						" password = '{$new_user->getPassword()}', birthdate = '{$new_user->getBirthdate()}', " .
+						"type = '{$new_user->getType()}', email = '{$new_user->getEmail()}' WHERE email = '{$this->user_model->getEmail()}'");
+				}
+				else
+				{
+					throw new DatabaseException(self::EXISTENT_EMAIL, self::CLASS_EXCEPTION_CODE);
+				}
+			}
+			else
+			{
+				throw new DatabaseException(self::NOT_EXISTENT_EMAIL, self::CLASS_EXCEPTION_CODE);
+			}
 		}
 	}
 	
