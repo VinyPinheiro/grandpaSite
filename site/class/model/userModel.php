@@ -111,27 +111,34 @@ class UserModel
 	
 	private function setPassword($password)
 	{
-		//Remove left and right spaces
-		$password = trim($password);
-		
-		//Verify if password is valid
-		if(strlen($password) >= self::MIN_PASSWORD_LENGTH)
+		if(substr_compare($password,"$2y$",0,4) != 0)
 		{
+			//Remove left and right spaces
+			$password = trim($password);
 			
-			if(strlen($password) <= self::MAX_PASSWORD_LENGTH)
+			//Verify if password is valid
+			if(strlen($password) >= self::MIN_PASSWORD_LENGTH)
 			{
-				//Criptography password
-				$encrypt_password = Globals::criptograph($password);
-				$this->password = $encrypt_password;
+				
+				if(strlen($password) <= self::MAX_PASSWORD_LENGTH)
+				{
+					//Criptography password
+					$encrypt_password = Globals::criptograph($password);
+					$this->password = $encrypt_password;
+				}
+				else
+				{
+					throw new UserModelException(self::GREAT_PASSWORD);
+				}
 			}
 			else
 			{
-				throw new UserModelException(self::GREAT_PASSWORD);
+				throw new UserModelException(self::SMALLER_PASSWORD);
 			}
 		}
 		else
 		{
-			throw new UserModelException(self::SMALLER_PASSWORD);
+			$this->password = $password;
 		}
 	}
 	
