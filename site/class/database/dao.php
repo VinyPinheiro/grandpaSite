@@ -57,7 +57,6 @@ class DAO
 		{
 			throw new DatabaseException(self::WRONG_QUERY);
 		}
-		
 	}
 	
 	/**
@@ -154,13 +153,15 @@ class DAO
 }
 
 class DatabaseException extends Exception{
-	
+	/**
+	 * code in(0=> DAO, 1 =>UserDAO, 2=>QuestionDAO, 3=> VideoDAO)
+	 */
 	public function __construct($message, $code = 0, Exception $previous = null) {
         parent::__construct($message, $code, $previous);
     }
 
     public function __toString() {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+        return __CLASS__ . ": [{$this->code}]: {$this->message}";
     }
 }
 
