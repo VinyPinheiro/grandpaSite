@@ -10,7 +10,7 @@ require_once(realpath('.') . '/class/configuration/globals.php');
 class UserDAO extends DAO
 {
 	/* Class attributes */
-	private $user;
+	private $user_model;
 
 	/* Methods */
 	
@@ -20,17 +20,17 @@ class UserDAO extends DAO
 	 * @param $user string with not null value and the user of database server 
 	 * @param $passwoord string with not null value and the user password's
 	 * @param $database string with not null value and the name of schema in database server
-	 * @param $user userModel object type
+	 * @param $user_model userModel object type
 	 */ 
-	public function __construct($host, $user, $password, $database, $user)
+	public function __construct($host, $user, $password, $database, $user_model)
  	{
 		super($host, $user, $password, $database);
-		setUser($user);
+		setUserModel($user_model);
 	}
 
-	private function setUser($user)
+	private function setUserModel($user_model)
 	{
-		$this->user = $user;
+		$this->user_model = $user_model;
 	}
 }
 ?>

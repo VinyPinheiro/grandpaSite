@@ -31,10 +31,10 @@ class DAO
 	 */ 
 	public function __construct($host, $user, $password, $database)
 	{
-		setHost($host);
-		setUser($user);
-		setPasword($password);
-		setDatabase($database);
+		$this->setHost($host);
+		$this->setUser($user);
+		$this->setPasword($password);
+		$this->setDatabase($database);
 		
 	}
 	
