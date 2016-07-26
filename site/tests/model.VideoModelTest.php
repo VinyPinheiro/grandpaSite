@@ -97,5 +97,32 @@ class VideoModelTest extends PHPUnit_Framework_TestCase
 		$video = new VideoModel("IblBGfLhztk","1",1, self::$questions);
 	}
 
+	/**
+	* @expectedException VideoModelException
+	* @expectedExceptionMessage VideoModel::QUESTION_ISNT_ARRAY
+	*/
+	public function testQuestionWithNotArray()
+	{
+		$video = new VideoModel("IblBGfLhztk","1",1,"Questão 1");
+	}
+
+	/**
+	* @expectedException VideoModelException
+	* @expectedExceptionMessage VideoModel::ALL_OBJECTS_MUST_BE_QUESTIONMODEL
+	*/
+	public function testQuestionWithNotArrayQuestionModel()
+	{
+		$video = new VideoModel("IblBGfLhztk","1",1,array("aa","bb",25));
+	}
+
+	/**
+	* @expectedException VideoModelException
+	* @expectedExceptionMessage VideoModel::ALL_OBJECTS_MUST_BE_QUESTIONMODEL
+	*/
+	public function testQuestionWithInvalidObject()
+	{
+		$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","123456789","1995-02-14","MAN","ADMINISTRATOR");
+		$video = new VideoModel("IblBGfLhztk","1",1,array($user,$user,$user,$user));
+	}
 }
 

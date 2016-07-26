@@ -12,7 +12,7 @@ class VideoModel
 	private $identifier; //Number with the identifier code for the video. If is a new video, this value is null.
 	private $link; //String with the youtube video identifier. Not null value and less 200 caracters
 	private $position; //Only number with the position of video in the category
-	private $questions; //Array contain all question objects from this video
+	private $questions; //Array associative contain all question objects from this video
 	
 	/* Exceptions messengers */
 	
@@ -21,6 +21,8 @@ class VideoModel
 	const LINK_GREAT_THAN_200 = "Link não pode ultrapassar 200 caracteres.";
 	const ONLY_UNSIGNED_VALUE = "Apenas valores positivos.";
 	const ONLY_NUMERIC_NUMBER = "Apenas valores numéricos.";
+	const ALL_OBJECTS_MUST_BE_QUESTIONMODEL = "Todos os objetos do vetor de questões devem ser do tipo QuestionModel";
+	const QUESTION_ISNT_ARRAY = "As questões devem estar em um array";
 
 	/* Methods */
 	
@@ -30,7 +32,7 @@ class VideoModel
 	 * @param position Only number with the position of video in the category
 	 * @param questions Array contain all question objects from this video, if no has question, this value is NULL
 	 */
-	public function __construct($link, $position, $identifier = NULL, $questions = NULL)
+	public function __construct($link, $position, $identifier = NULL, $questions = array())
 	{
 		$this->setIdentifier($identifier);	
 		$this->setLink($link);	
@@ -96,7 +98,43 @@ class VideoModel
 
 	private function setQuestions($question)
 	{
-		$this->questions = $question;
+		if(is_array($question))
+		{
+			if(count($question) > 0)
+			{
+				//Verify if all objects in $question is a QuestionModel type
+				for($i = 0; $i < count($question); $i++)
+				{
+					if(is_object($question[$i]))
+					{
+						if(get_class($question[$i]) == "QuestionModel")
+						{
+							// Nothing to do.
+						}
+						else
+						{
+							throw new VideoModelException(self::ALL_OBJECTS_MUST_BE_QUESTIONMODEL);
+						}
+					}
+					else
+					{
+						throw new VideoModelException(self::ALL_OBJECTS_MUST_BE_QUESTIONMODEL);
+					}
+
+				}
+
+				//We came up here the array is valid
+				$this->questions = $question;
+			}
+			else
+			{
+				$this->questions = $question;
+			}
+		}
+		else
+		{
+			throw new VideoModelException(self::QUESTION_ISNT_ARRAY);
+		}
 	}
 }
 
