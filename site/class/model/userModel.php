@@ -142,6 +142,11 @@ class UserModel
 		}
 	}
 	
+	public function getPassword()
+	{
+		return $this->password;
+	}
+	
 	private function setBirthdate($birthdate)
 	{	
 		if($birthdate != NULL && $birthdate != "")

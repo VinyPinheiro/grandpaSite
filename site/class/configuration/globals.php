@@ -1,9 +1,9 @@
 <?php
 class Globals{
-	public static $HOST = '127.0.0.1';
-	public static $USER = 'root';
-	public static $PASSWORD = '';
-	public static $DATABASE = 'vovoSite';
+	const HOST = '127.0.0.1';
+	const USER = 'root';
+	const PASSWORD = '';
+	const DATABASE = 'vovoSite';
 	
 	
 	/**
