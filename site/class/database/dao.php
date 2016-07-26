@@ -33,7 +33,7 @@ class DAO
 	{
 		$this->setHost($host);
 		$this->setUser($user);
-		$this->setPasword($password);
+		$this->setPassword($password);
 		$this->setDatabase($database);
 		
 	}
@@ -108,7 +108,7 @@ class DAO
 	{
 		if($host != NULL && $host != "")
 		{
-			if(filter_var($host,FILTER_VALIDATE_URL))
+			if(filter_var($host,FILTER_VALIDATE_URL) || filter_var($host, FILTER_VALIDATE_IP))
 			{
 				$this->host = $host;
 			}
