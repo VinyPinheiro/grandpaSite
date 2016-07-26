@@ -54,7 +54,7 @@ class UserDAO extends DAO
 			//Try open connection
 			parent::connection();
 			
-			//Save resultfor query
+			//Save result for query
 			$data_result = parent::query("SELECT name,email,password,birthdate,sex,type FROM USER WHERE email = '" . $email . "'");
 			
 			//Verify if found register
@@ -112,8 +112,50 @@ class UserDAO extends DAO
 		}
 	}
 	
+	/**
+	 * Method to update user data in database
+	 * @param new_user not null value, the UserModel with the new values
+	 */
+	public function update($new_user)
+	{
+		// Verify if all emails is same
+		if(strcmp($this->user_model->getEmail(), $new_user->getEmail()) == 0)
+		{
+			$this->updateSameEmail($new_user);
+		}
+		else
+		{
+			//Save old user data
+			$old_user_model = $this->user_model();
+			
+			//Save data from new user
+			$this->setUserModel($new_user);
+			$this->register();
+			
+			//Remove old user
+			$this->setUserModel($old_user_model);
+			$this->delete();
+		}
+	}
 	
-	
+	/**
+	 * Method to update user data in database, but email attribute not change
+	 * @param old_user not null value, the UserModel with the new values
+	 */
+	private function updateSameEmail($user)
+	{
+		//Verify if register exists
+		if($this->findByEmail($this->user_model->getEmail()) != NULL)
+		{
+			parent::query("UPDATE USER SET name = '{$user->getName()}', sex = '{$user->getSex()}'," .
+				" password = '{$user->getPassword()}', birthdate = '{$user->getBirthdate()}', " .
+				"type = '{$user->getType()}' WHERE email = '{$this->user_model->getEmail()}'");
+		}
+		else
+		{
+			throw new DatabaseException(self::NOT_EXISTENT_EMAIL, self::CLASS_EXCEPTION_CODE);
+		}
+	}
 	
 	/* Getter and Setter */
 

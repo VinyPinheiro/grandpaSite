@@ -163,5 +163,20 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	{
 		$this->user_dao->delete();
 	}
+	
+	/**
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessenger UserDAO::NOT_EXISTENT_EMAIL
+	 */
+	public function testUpdateUserWithoutChangeEmailButEmailNotInDatabases()
+	{
+		$this->user_dao->update(new UserModel("Vinicius Pinheiro da Silva","viny-pinheiro@abcd.com","123456789","1995-02-14","MAN","ADMINISTRATOR"));
+	}
+	
+	public function testUpdateUserWithoutChangeEmail()
+	{
+		$this->user_dao->register();
+		$this->user_dao->update(new UserModel("Vinicius Pinheiro da Silva","viny-pinheiro@abcd.com","123456789","1995-02-14","MAN","ADMINISTRATOR"));
+	}
 }
 
