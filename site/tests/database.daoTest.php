@@ -19,7 +19,7 @@ class DaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessage Wrong Query
+	 * @expectedExceptionMessage DAO::WRONG_QUERY
 	 */
 	public function testWrongQuery()
 	{

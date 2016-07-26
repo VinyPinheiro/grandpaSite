@@ -6,11 +6,17 @@
  
 class DAO
 {
+	/* Class attributes */
 	private $host;
 	private $user;
 	private $password;
 	private $database;
 	private $connection;
+	
+	/* Exception messengers */
+	
+	const WRONG_QUERY = "Query não foi compilada com sucesso";
+	const CONNECTION_FAILED = "Connection failed";
 	
 	
 	/**
@@ -46,7 +52,7 @@ class DAO
 		}
 		else
 		{
-			throw new DatabaseException("Wrong Query");
+			throw new DatabaseException(self::WRONG_QUERY);
 		}
 		
 	}
@@ -91,7 +97,7 @@ class DAO
 		}
 		else
 		{
-			throw new DatabaseException("Connection failed");
+			throw new DatabaseException(self::CONNECTION_FAILED);
 		}
 	}
 }
