@@ -24,6 +24,11 @@ class VideoModel
 	const ALL_OBJECTS_MUST_BE_QUESTIONMODEL = "Todos os objetos do vetor de questões devem ser do tipo QuestionModel";
 	const QUESTION_ISNT_ARRAY = "As questões devem estar em um array";
 
+	/* Help constants */
+
+	const MAX_CARACTERS = 200;
+	const DEFAULT_VIDEO_POSITION = 0;
+
 	/* Methods */
 	
 	/**
@@ -61,7 +66,7 @@ class VideoModel
 		
 		if($link != NULL && $link != "")
 		{
-			if(strlen($link) <= 200)
+			if(strlen($link) <= self::MAX_CARACTERS)
 			{
 				$this->link = $link;
 			}
@@ -81,7 +86,7 @@ class VideoModel
 		if(is_numeric($position))
 		{
 			$position = intval($position);
-			if($position >= 0)
+			if($position >= self::DEFAULT_VIDEO_POSITION)
 			{
 				$this->position = $position;
 			}
