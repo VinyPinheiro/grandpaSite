@@ -24,7 +24,7 @@ class UserDAO extends DAO
 	 */ 
 	public function __construct($host, $user, $password, $database, $user_model)
  	{
-		super($host, $user, $password, $database);
+		parent::__construct($host, $user, $password, $database);
 		setUserModel($user_model);
 	}
 
