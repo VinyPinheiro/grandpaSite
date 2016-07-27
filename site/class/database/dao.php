@@ -63,7 +63,7 @@ class DAO
 	 * Method to return errors in sql
 	 * @return string with error messenger
 	 */
-	protected function getErrors()
+	public function getErrors()
 	{
 		return $this->connection->error;
 	}
