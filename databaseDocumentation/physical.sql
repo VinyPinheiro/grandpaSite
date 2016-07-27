@@ -14,7 +14,7 @@ CONSTRAINT user_pk PRIMARY KEY(email)
 ) ENGINE = InnoDB CHARSET=utf8;
 
 CREATE TABLE QUESTION (
-identifier INT  NOT NULL,
+identifier INT  NOT NULL AUTO_INCREMENT,
 a VARCHAR(200) NOT NULL,
 d VARCHAR(200) NOT NULL,
 e VARCHAR(200) NOT NULL,
@@ -29,7 +29,7 @@ CONSTRAINT question_user_fk FOREIGN KEY(email) REFERENCES USER (email) ON UPDATE
 ) ENGINE = InnoDB CHARSET=utf8;
 
 CREATE TABLE CATEGORY (
-identifier INT  NOT NULL,
+identifier INT  NOT NULL AUTO_INCREMENT,
 name VARCHAR(50) NOT NULL,
 email VARCHAR(60) NOT NULL,
 CONSTRAINT category_pk PRIMARY KEY (identifier),
@@ -45,7 +45,7 @@ CONSTRAINT belongs_to_the_category_fk FOREIGN KEY(belongs_identifier) REFERENCES
 ) ENGINE = InnoDB CHARSET=utf8;
 
 CREATE TABLE VIDEO (
-identifier INT  NOT NULL,
+identifier INT  NOT NULL AUTO_INCREMENT,
 link VARCHAR(200) NOT NULL,
 position INT NOT NULL,
 category_identifier INT NOT NULL,

@@ -1,6 +1,6 @@
 <?php
 /**
- * file: database.daoTest.php
+ * file: database.userDaoTest.php
  */
  
 class userDaoTest extends PHPUnit_Framework_TestCase
@@ -111,7 +111,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	{
 		try
 		{
-			$this->user_dao->findByEmail("viny-pinheiro@abc.com'jhg");
+			UserDAO::findByEmail("viny-pinheiro@abc.com'jhg");
 		}
 		catch(DatabaseException $message)
 		{
@@ -139,7 +139,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 
 	public function testFindUserByEmail()
 	{
-		$this->user_dao->findByEmail("viny-pinheiro@abc.com");
+		UserDAO::findByEmail("viny-pinheiro@abc.com");
 	}
 	
 	/**
@@ -148,7 +148,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testFindUserByNullEmail()
 	{
-		$this->user_dao->findByEmail(NULL);
+		UserDAO::findByEmail(NULL);
 	}
 	
 	public function testRegisterUser()
