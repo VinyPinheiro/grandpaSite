@@ -60,15 +60,6 @@ class DAO
 	}
 	
 	/**
-	 * Method to return errors in sql
-	 * @return string with error messenger
-	 */
-	public function getErrors()
-	{
-		return $this->connection->error;
-	}
-	
-	/**
 	 * Mehod to close connection with database server
 	 */
 	protected function disconnect(){
@@ -90,17 +81,7 @@ class DAO
 	 */
 	protected function connection()
 	{
-		
 		$this->connection = new mysqli($this->host, $this->user, $this->password, $this->database);
-		
-		if(!mysqli_connect_errno())
-		{
-			// Nothing to do
-		}
-		else
-		{
-			throw new DatabaseException(self::CONNECTION_FAILED);
-		}
 	}
 
 	private function setHost($host)
