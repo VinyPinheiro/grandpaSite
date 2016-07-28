@@ -45,17 +45,19 @@ class UserDAO extends DAO
 	 * @param email not null value and contain a valid email
 	 * @return returns null if not found User or returns a user with your data
 	 */
-	public function findByEmail($email)
+	public static function findByEmail($email)
 	{
 		if($email != NULL && $email != "")
 		{
 			//Set variable to return for null
 			$user = NULL;
+			
 			//Try open connection
-			parent::connection();
+			$connection = new DAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE);
+			$connection->connection();
 			
 			//Save result for query
-			$data_result = parent::query("SELECT name,email,password,birthdate,sex,type FROM USER WHERE email = '" . $email . "'");
+			$data_result = $connection->query("SELECT name,email,password,birthdate,sex,type FROM USER WHERE email = '" . $email . "'");
 			
 			//Verify if found register
 			if($data_result->num_rows != 0)
@@ -68,7 +70,7 @@ class UserDAO extends DAO
 				$user = NULL;
 			}
 			
-			parent::disconnect();
+			$connection->disconnect();
 			return $user;
 		}
 		else
@@ -83,7 +85,7 @@ class UserDAO extends DAO
 	public function register()
 	{
 		//Verify if register exists
-		if($this->findByEmail($this->user_model->getEmail()) == NULL)
+		if(self::findByEmail($this->user_model->getEmail()) == NULL)
 		{
 			parent::query("INSERT INTO USER(name, email,sex,password,birthdate, type) VALUES(".
 				"'{$this->user_model->getName()}','{$this->user_model->getEmail()}',".
@@ -102,7 +104,7 @@ class UserDAO extends DAO
 	public function delete()
 	{
 		//Verify if register exists
-		if($this->findByEmail($this->user_model->getEmail()) != NULL)
+		if(self::findByEmail($this->user_model->getEmail()) != NULL)
 		{
 			parent::query("DELETE FROM USER WHERE email = '{$this->user_model->getEmail()}'");
 		}
@@ -125,9 +127,9 @@ class UserDAO extends DAO
 		}
 		else
 		{
-			if($this->findByEmail($this->user_model->getEmail()) != NULL)
+			if(self::findByEmail($this->user_model->getEmail()) != NULL)
 			{
-				if($this->findByEmail($new_user->getEmail()) == NULL)
+				if(self::findByEmail($new_user->getEmail()) == NULL)
 				{
 					parent::query("UPDATE USER SET name = '{$new_user->getName()}', sex = '{$new_user->getSex()}'," .
 						" password = '{$new_user->getPassword()}', birthdate = '{$new_user->getBirthdate()}', " .
@@ -147,12 +149,12 @@ class UserDAO extends DAO
 	
 	/**
 	 * Method to update user data in database, but email attribute not change
-	 * @param old_user not null value, the UserModel with the new values
+	 * @param user not null value, the UserModel with the new values
 	 */
 	private function updateSameEmail($user)
 	{
 		//Verify if register exists
-		if($this->findByEmail($this->user_model->getEmail()) != NULL)
+		if(self::findByEmail($this->user_model->getEmail()) != NULL)
 		{
 			parent::query("UPDATE USER SET name = '{$user->getName()}', sex = '{$user->getSex()}'," .
 				" password = '{$user->getPassword()}', birthdate = '{$user->getBirthdate()}', " .
