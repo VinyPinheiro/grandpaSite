@@ -41,7 +41,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger DAO::INVALID_HOST
+	 * @expectedExceptionMessage DAO::INVALID_HOST
 	 */
 	public function testOpenuser_daoWithInvalidHost()
 	{
@@ -50,7 +50,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger DAO::NULL_HOST
+	 * @expectedExceptionMessage DAO::NULL_HOST
 	 */
 	public function testOpenuser_daoWithNullHost()
 	{
@@ -59,7 +59,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger DAO::NULL_HOST
+	 * @expectedExceptionMessage DAO::NULL_HOST
 	 */
 	public function testOpenuser_daoWithEmptyHost()
 	{
@@ -68,7 +68,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger DAO::NULL_USER
+	 * @expectedExceptionMessage DAO::NULL_USER
 	 */
 	public function testOpenuser_daoWithEmptyUser()
 	{
@@ -77,7 +77,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger DAO::NULL_USER
+	 * @expectedExceptionMessage DAO::NULL_USER
 	 */
 	public function testOpenuser_daoWithNullUser()
 	{
@@ -86,7 +86,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger DAO::NULL_USER
+	 * @expectedExceptionMessage DAO::NULL_DATABASE
 	 */
 	public function testOpenuser_daoWithNullDatabase()
 	{
@@ -96,7 +96,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Force SQL error
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger DAO::WRONG_QUERY
+	 * @expectedExceptionMessage DAO::WRONG_QUERY
 	 */
 	public function testFindUserByEmailForceWrongQuery()
 	{
@@ -121,7 +121,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger UserDAO::USER_MODEL_ISNT_OBJECT	
+	 * @expectedExceptionMessage UserDAO::USER_MODEL_ISNT_OBJECT	
 	 */
 	public function testCreateUserDaoWithNonObjectUserModel()
 	{
@@ -130,7 +130,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger UserDAO::INVALID_MODEL	
+	 * @expectedExceptionMessage UserDAO::INVALID_MODEL	
 	 */
 	public function testCreateUserDaoWithInvalidObject()
 	{
@@ -144,7 +144,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger UserDAO::NULL_EMAIL
+	 * @expectedExceptionMessage UserDAO::NULL_EMAIL
 	 */
 	public function testFindUserByNullEmail()
 	{
@@ -160,7 +160,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger UserDAO::EXISTENT_EMAIL
+	 * @expectedExceptionMessage UserDAO::EXISTENT_EMAIL
 	 */
 	public function testRegisterDuplicatedUser()
 	{
@@ -170,7 +170,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger UserDAO::NOT_EXISTENT_EMAIL
+	 * @expectedExceptionMessage UserDAO::NOT_EXISTENT_EMAIL
 	 */
 	public function testDeleteNonExistentUser()
 	{
@@ -179,7 +179,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger UserDAO::NOT_EXISTENT_EMAIL
+	 * @expectedExceptionMessage UserDAO::NOT_EXISTENT_EMAIL
 	 */
 	public function testUpdateUserWithoutChangeEmailButEmailNotInDatabases()
 	{		
@@ -202,7 +202,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger UserDAO::NOT_EXISTENT_EMAIL
+	 * @expectedExceptionMessage UserDAO::NOT_EXISTENT_EMAIL
 	 */
 	public function testUpdateUserWithChangeEmailButOldEmailNotInDatabases()
 	{
@@ -211,7 +211,7 @@ class userDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger UserDAO::EXISTENT_EMAIL
+	 * @expectedExceptionMessage UserDAO::EXISTENT_EMAIL
 	 */
 	public function testUpdateUserWithChangeEmailButNewEmailInDatabases()
 	{

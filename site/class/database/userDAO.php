@@ -149,7 +149,7 @@ class UserDAO extends DAO
 	
 	/**
 	 * Method to update user data in database, but email attribute not change
-	 * @param old_user not null value, the UserModel with the new values
+	 * @param user not null value, the UserModel with the new values
 	 */
 	private function updateSameEmail($user)
 	{
