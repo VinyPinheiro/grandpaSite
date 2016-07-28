@@ -19,7 +19,7 @@ class QuestionDAO extends DAO
 	const QUESTION_MODEL_ISNT_OBJECT = "question deve ser um objeto.";
 	const EXISTENT_IDENTIFIER = "Identificador já cadastrado.";
 	const NOT_EXISTENT_IDENTIFIER = "Identificador não cadastrado.";
-
+	const INVALID_IDENTIFIER = "Para atualização o novo identificador não pode ser nulo nem vazio.";
 
 	/* Help constants */
 	
@@ -41,21 +41,6 @@ class QuestionDAO extends DAO
 		$this->setQuestionModel($question);
 	}
 			
-	/**
-	 * Method to remove this Question for database
-	 */
-	public function delete()
-	{
-		//Verify if register exists
-		if(self::findByIdentifier($this->question->getIdentifier()) != NULL)
-		{
-			parent::query("DELETE FROM QUESTION WHERE identifier = {$this->question->getIdentifier()}");
-		}
-		else
-		{
-			throw new DatabaseException(self::NOT_EXISTENT_IDENTIFIER, self::CLASS_EXCEPTION_CODE);
-		}
-	}
 	/**
 	 * Method to find and locate an Question By Identifier
 	 * @param identifier contain an integer with the question code or a null value if a new question
@@ -119,6 +104,83 @@ class QuestionDAO extends DAO
 		else
 		{
 			throw new DatabaseException(self::EXISTENT_IDENTIFIER, self::CLASS_EXCEPTION_CODE);
+		}
+	}
+	
+	/**
+	 * Method to remove this Question for database
+	 */
+	public function delete()
+	{
+		//Verify if register exists
+		if(self::findByIdentifier($this->question->getIdentifier()) != NULL)
+		{
+			parent::query("DELETE FROM QUESTION WHERE identifier = {$this->question->getIdentifier()}");
+			$this->question = NULL;
+		}
+		else
+		{
+			throw new DatabaseException(self::NOT_EXISTENT_IDENTIFIER, self::CLASS_EXCEPTION_CODE);
+		}
+	}
+	
+	
+	/**
+	 * Method to update question data in database
+	 * @param new_question not null value, the QuestionModel with the new values
+	 */
+	public function update($new_question)
+	{
+		if(intval($this->question->getIdentifier()) == $new_question->getIdentifier())
+		{
+			$this->updateSameIdentifier($new_question);
+		}
+		else
+		{
+			if(self::findByIdentifier($this->question->getIdentifier()) != NULL)
+			{
+				if(self::findByIdentifier($new_question->getIdentifier()) == NULL && $new_question->getIdentifier() != NULL)
+				{
+					parent::query("UPDATE QUESTION SET a = '{$new_question->getAlternative_A()}', b = '{$new_question->getAlternative_B()}'," .
+						"c = '{$new_question->getAlternative_C()}',d = '{$new_question->getAlternative_D()}'," .
+						"e = '{$new_question->getAlternative_E()}',correct = '{$new_question->getCorrectLetter()}'," .
+						"enunciation = '{$new_question->getEnunciate()}', image = '{$new_question->getImagePath()}'," .
+						"email = '{$new_question->getOwner()->getEmail()}', identifier = '{$new_question->getIdentifier()}' " .
+						"WHERE identifier = '{$this->question->getIdentifier()}'");
+						$this ->question = $new_question;
+				}
+				else
+				{
+					throw new DatabaseException(self::INVALID_IDENTIFIER, self::CLASS_EXCEPTION_CODE);
+				}
+			}
+			else
+			{
+				throw new DatabaseException(self::NOT_EXISTENT_IDENTIFIER, self::CLASS_EXCEPTION_CODE);
+			}
+		}
+	}
+	
+	/**
+	 * Method to update question data in database, but identifier attribute not change
+	 * @param new_question not null value, the QuestionModel with the new values
+	 */
+	private function updateSameIdentifier($new_question)
+	{
+		//Verify if register exists
+		if(self::findByIdentifier($this->question->getIdentifier()) != NULL)
+		{
+			parent::query("UPDATE QUESTION SET a = '{$new_question->getAlternative_A()}', b = '{$new_question->getAlternative_B()}'," .
+				"c = '{$new_question->getAlternative_C()}',d = '{$new_question->getAlternative_D()}'," .
+				"e = '{$new_question->getAlternative_E()}',correct = '{$new_question->getCorrectLetter()}'," .
+				"enunciation = '{$new_question->getEnunciate()}', image = '{$new_question->getImagePath()}'," .
+				"email = '{$new_question->getOwner()->getEmail()}' WHERE identifier = '{$this->question->getIdentifier()}'");
+				
+				$this ->question = $new_question;
+		}
+		else
+		{
+			throw new DatabaseException(self::NOT_EXISTENT_IDENTIFIER, self::CLASS_EXCEPTION_CODE);
 		}
 	}
 	

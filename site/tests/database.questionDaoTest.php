@@ -5,12 +5,14 @@
  
 class QuestionDaoTest extends PHPUnit_Framework_TestCase
 {
-	
 	private $question_dao;
 	private $user_dao;
 	private static $user;
 	private static $question;
+	private static $question2;
 	private static $image_default_path;
+	
+	const DEFAULT_IDENTIFIER = 12678;
 	
 	protected function setUp()
 	{
@@ -20,7 +22,8 @@ class QuestionDaoTest extends PHPUnit_Framework_TestCase
         $this->user_dao = new UserDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$user);
         $this->user_dao->register(); 
         
-        self::$question = new QuestionModel(self::$user,"Enunciado1","a","b","c","d","e","E",self::$image_default_path,1);
+        self::$question = new QuestionModel(self::$user,"Enunciado1","a","b","c","d","e","E",self::$image_default_path,self::DEFAULT_IDENTIFIER);
+        self::$question2 = new QuestionModel(self::$user,"Enunciado2","a","b","c","d","e","E",self::$image_default_path,3);
         $this->question_dao = new QuestionDAO(Globals::HOST, Globals::USER, Globals::PASSWORD, Globals::DATABASE,self::$question);
 
 	}
@@ -48,7 +51,7 @@ class QuestionDaoTest extends PHPUnit_Framework_TestCase
 		
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger QuestionDAO::USER_MODEL_ISNT_OBJECT	
+	 * @expectedExceptionMessage QuestionDAO::QUESTION_MODEL_ISNT_OBJECT	
 	 */
 	public function testCreateQuestionDaoWithNonObjectQuestionModel()
 	{
@@ -57,7 +60,7 @@ class QuestionDaoTest extends PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger QuestionDAO::INVALID_MODEL	
+	 * @expectedExceptionMessage QuestionDAO::INVALID_MODEL	
 	 */
 	public function testCreateQuestionDaoWithInvalidObject()
 	{
@@ -83,12 +86,62 @@ class QuestionDaoTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @expectedException DatabaseException
-	 * @expectedExceptionMessenger QuestionDAO::EXISTENT_IDENTIFIER
+	 * @expectedExceptionMessage QuestionDAO::EXISTENT_IDENTIFIER
 	 */
 	public function testRegisterSameQuestionIdentifier()
 	{
 		$this->question_dao->register();
 		$this->question_dao->register();
+	}
+	
+	public function testUpdateQuestionWithoutChangeIdentifier()
+	{
+		$this->question_dao->register();
+		
+		$question2 = new QuestionModel(self::$user,"Enunciado2","a","b","c","d","e","E",self::$image_default_path,self::DEFAULT_IDENTIFIER);
+		$this->question_dao->update($question2);
+		
+		assert(strcmp($question2->getEnunciate(), QuestionDAO::findByIdentifier(self::DEFAULT_IDENTIFIER)->getEnunciate()) == 0, "Not changed enunciate.");
+	}
+	
+	/**
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessage QuestionDAO::NOT_EXISTENT_IDENTIFIER
+	 */
+	public function testUpdateQuestionWithoutChangeIdentifierButInitialIdentifierNotExists()
+	{		
+		$question2 = new QuestionModel(self::$user,"Enunciado2","a","b","c","d","e","E",self::$image_default_path,self::DEFAULT_IDENTIFIER);
+		$this->question_dao->update($question2);
+	}
+	
+	public function testUpdateQuestionWithChangedIdentifier()
+	{
+		$this->question_dao->register();
+		
+		$this->question_dao->update(self::$question2);
+		
+		assert(strcmp(self::$question2->getEnunciate(), QuestionDAO::findByIdentifier(self::$question2->getIdentifier())->getEnunciate()) == 0, "Not changed enunciate.");
+	}
+	
+	/**
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessage QuestionDAO::INVALID_IDENTIFIER
+	 */
+	public function testUpdateQuestionWithoutChangeIdentifierButInitialIdentifierIsInvalid()
+	{	
+		$this->question_dao->register();
+		$question2 = new QuestionModel(self::$user,"Enunciado2","a","b","c","d","e","E",self::$image_default_path,NULL);
+		$this->question_dao->update($question2);
+	}
+	
+	/**
+	 * @expectedException DatabaseException
+	 * @expectedExceptionMessage QuestionDAO::NOT_EXISTENT_IDENTIFIER
+	 */
+	public function testUpdateQuestionWithoutChangeIdentifierButInitialIdentifierIsntExists()
+	{	
+		$question2 = new QuestionModel(self::$user,"Enunciado2","a","b","c","d","e","E",self::$image_default_path,NULL);
+		$this->question_dao->update($question2);
 	}
 }
 
