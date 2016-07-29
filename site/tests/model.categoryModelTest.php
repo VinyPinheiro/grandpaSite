@@ -28,4 +28,42 @@ class CategoryModelTest extends PHPUnit_Framework_TestCase
 	{
 		new CategoryModel("Nome", self::$user, NULL, NULL, "A");
 	}
+	
+	/**
+	* @expectedException CategoryModelException
+	* @expectedExceptionMessage CategoryModel::NULL_NAME
+	*/
+	public function testWithNullName()
+	{
+		new CategoryModel(NULL, self::$user);
+	}
+	
+	/**
+	* @expectedException CategoryModelException
+	* @expectedExceptionMessage CategoryModel::INVALID_OWNER
+	*/
+	public function testWithInvalidOwner()
+	{
+		$question = new QuestionModel(self::$user,"Enunciado1","a","b","c","d","e","E");
+		new CategoryModel("Nome",$question);
+	}
+		
+	/**
+	* @expectedException CategoryModelException
+	* @expectedExceptionMessage CategoryModel::OWNER_NO_HAVE_PRIVILEGES
+	*/
+	public function testWithNoPrivilegesOwner()
+	{
+		$user = new UserModel("Vinicius Pinheiro","viny-pinheiro@hotmail.com","123456789","1995-02-14","MAN","STUDENT");
+		new CategoryModel("Nome",$user);
+	}
+	
+	/**
+	* @expectedException CategoryModelException
+	* @expectedExceptionMessage CategoryModel::OWNER_ISNT_OBJECT
+	*/
+	public function testWithOwnerIsnTObject()
+	{
+		new CategoryModel("Nome","Joao da silva");
+	}	
 }

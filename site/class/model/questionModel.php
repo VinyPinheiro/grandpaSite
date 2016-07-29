@@ -178,9 +178,11 @@ class QuestionModel
 				case 'E':
 					$this->alternative_E = $alternative;
 				break;
+				// @codeCoverageIgnoreStart
 				default:
 					throw new QuestionModelException(self::INVALID_LETTER);
 			}
+				// @codeCoverageIgnoreEnd
 		}
 		else
 		{
@@ -230,7 +232,9 @@ class QuestionModel
 	}
 }
 
-
+/**
+ * @codeCoverageIgnore
+ */
 class QuestionModelException extends Exception{
 	
 	public function __construct($message, $code = 0, Exception $previous = null) {
