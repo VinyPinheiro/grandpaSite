@@ -23,6 +23,8 @@ class CategoryModel
 	const OWNER_NO_HAVE_PRIVILEGES = "Usuário não tem privilégios suficientes";
 	const INVALID_OWNER = "Dono deve ser um objeto do tipo Usuário.";
 	const OWNER_ISNT_OBJECT = "Dono deve ser um objeto.";
+	const ALL_OBJECTS_MUST_BE_CATEGORYMODEL = "Todos os objetos do vetor de categorias devem ser do tipo CategoryModel";
+	const SON_CATEGORY_ISNT_ARRAY = "As questões devem estar em um array";
 
 	/* Method */
 	
@@ -38,6 +40,7 @@ class CategoryModel
 		$this->setIdentifier($identifier);
 		$this->setName($name);
 		$this->setOwner($owner);
+		$this->setSonCategory($son_category);
 	}
 
 
@@ -94,6 +97,51 @@ class CategoryModel
 		{
 			throw new CategoryModelException(self::OWNER_ISNT_OBJECT);
 		}
+	}
+	
+	private function setSonCategory($son_category)
+	{
+		if($son_category != NULL && $son_category != "")
+		{
+			if(is_array($son_category))
+			{
+				//Verify if all objects in $son_category is a CategoryModel type
+				for($i = 0; $i < count($son_category); $i++)
+				{
+					if(is_object($son_category[$i]))
+					{
+						if(get_class($son_category[$i]) == "CategoryModel")
+						{
+							// Nothing to do.
+						}
+						else
+						{
+							throw new CategoryModelException(self::ALL_OBJECTS_MUST_BE_CATEGORYMODEL);
+						}
+					}
+					else
+					{
+						throw new CategoryModelException(self::ALL_OBJECTS_MUST_BE_CATEGORYMODEL);
+					}
+				}
+
+				//We came up here the array is valid
+				$this->son_category = $son_category;
+			}
+			else
+			{
+				throw new CategoryModelException(self::SON_CATEGORY_ISNT_ARRAY);
+			} 
+		}
+		else
+		{
+			$this->son_category = NULL;
+		} 
+	}
+	
+	public function getSons()
+	{
+		return $this->son_category;
 	}
 }
 
