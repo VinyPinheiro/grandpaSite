@@ -141,6 +141,11 @@ class VideoModel
 			throw new VideoModelException(self::QUESTION_ISNT_ARRAY);
 		}
 	}
+	
+	public function getPosition()
+	{
+		return $this->position;
+	}
 }
 
 /**
