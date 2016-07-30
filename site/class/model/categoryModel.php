@@ -27,7 +27,7 @@ class CategoryModel
 	const ALL_OBJECTS_MUST_BE_CATEGORYMODEL = "Todos os objetos do vetor de categorias devem ser do tipo CategoryModel";
 	const SON_CATEGORY_ISNT_ARRAY = "As questões devem estar em um array";
 	const ALL_OBJECTS_MUST_BE_VIDEOMODEL = "Todos os objetos do vetor de videos devem ser do tipo VideoModel";
-	const VIDEO_ISNT_ARRAY = "Os videos devem estar em um array";
+	const VIDEOS_ISNT_ARRAY = "Os videos devem estar em um array";
 	const ALL_POSITIONS_ARE_NOT_UNIQUE_NOR_FAULT = "Alguma video repete a posição ou está faltando algum video da sequencia.";
 
 	/* Method */
@@ -52,21 +52,35 @@ class CategoryModel
 	 * Method to using with usort to sort the video object by position
 	 * @param video1 receive a VideoModel object, not null values
 	 * @param video2 receive a VideoModel object, not null values
-	 * @return -1 if video1 is before video2 and 1 if video1 after video2 or video1 equals video2
+	 * @return -1 if video1 is before video2 and 1 if video1 after video2 or video1 equals video2. 0 If has problems
 	 */
 	private function compare($video1, $video2)
 	{
 		//Initialize variable with 0 (equals)
 		$compare_result = 0;
 		
-		//Verify if position of video1 is before position video2
-		if($video1->getPosition() < $video2->getPosition())
+		if(is_object($video1) && is_object($video2))
 		{
-			$compare_result = -1;
+			if(get_class($video1) == "VideoModel" && get_class($video2) == "VideoModel")
+			{
+				//Verify if position of video1 is before position video2
+				if($video1->getPosition() < $video2->getPosition())
+				{
+					$compare_result = -1;
+				}
+				else
+				{
+					$compare_result = 1;
+				}
+			}
+			else
+			{
+				$compare_result = 0;
+			}
 		}
 		else
 		{
-			$compare_result = 1;
+			$compare_result = 0;
 		}
 		
 		return $compare_result;
