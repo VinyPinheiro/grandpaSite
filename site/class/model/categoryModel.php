@@ -143,6 +143,26 @@ class CategoryModel
 	{
 		return $this->son_category;
 	}
+	
+	public function getName()
+	{
+		return $this->name;
+	}
+	
+	public function getIdentifier()
+	{
+		return $this->identifier;
+	}
+	
+	public function getOwner()
+	{
+		return $this->owner;
+	}
+	
+	public function getVideos()
+	{
+		return $this->videos;
+	}
 }
 
 /**

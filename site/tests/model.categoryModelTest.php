@@ -23,7 +23,11 @@ class CategoryModelTest extends PHPUnit_Framework_TestCase
 	
 	public function testCreateASimpleCategory()
 	{
-		new CategoryModel("Nome",self::$user);
+		$name = "Nome";
+		$category = new CategoryModel($name,self::$user);
+		
+		assert(strcmp($category->getName(), $name) == 0, "Expected Same names");
+		assert($category->getOwner() == self::$user, "Expected Same Owner");
 	}
 	
 	/**
