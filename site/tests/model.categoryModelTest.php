@@ -183,4 +183,12 @@ class CategoryModelTest extends PHPUnit_Framework_TestCase
 		$category = new CategoryModel("Nome",self::$user,"Meus Videos",NULL);
 	}
 	
+	/**
+	* @expectedException CategoryModelException
+	* @expectedExceptionMessage CategoryModel::NOT_NULL_VIDEO_AND_SUBCATEGOIES
+	*/
+	public function testCreateACategoryWithSubCategoriesAndVideos()
+	{
+		$category = new CategoryModel("Nome",self::$user,self::$videos,self::$categories);
+	}
 }

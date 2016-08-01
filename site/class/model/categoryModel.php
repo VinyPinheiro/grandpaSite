@@ -29,6 +29,7 @@ class CategoryModel
 	const ALL_OBJECTS_MUST_BE_VIDEOMODEL = "Todos os objetos do vetor de videos devem ser do tipo VideoModel";
 	const VIDEOS_ISNT_ARRAY = "Os videos devem estar em um array";
 	const ALL_POSITIONS_ARE_NOT_UNIQUE_NOR_FAULT = "Alguma video repete a posição ou está faltando algum video da sequencia.";
+	const NOT_NULL_VIDEO_AND_SUBCATEGOIES = "Um dos dois atributos deve ser sempre vazio.";
 
 	/* Method */
 	
@@ -46,6 +47,20 @@ class CategoryModel
 		$this->setOwner($owner);
 		$this->setSonCategory($son_category);
 		$this->setVideos($videos);
+		
+		$this->verifyConsistence();
+	}
+	
+	private function verifyConsistence()
+	{
+		if($this->getSons() == NULL || $this->getVideos() == NULL)
+		{
+			// Nothing to do.
+		}
+		else
+		{
+			throw new CategoryModelException(self::NOT_NULL_VIDEO_AND_SUBCATEGOIES);
+		}
 	}
 	
 	/**
