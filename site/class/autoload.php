@@ -8,4 +8,5 @@
 	require_once('model/categoryModel.php');
 	require_once('database/userDAO.php');
 	require_once('database/questionDAO.php');
+	require_once('database/categoryDAO.php');
 ?>

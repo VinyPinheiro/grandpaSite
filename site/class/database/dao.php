@@ -135,7 +135,7 @@ class DAO
 
 class DatabaseException extends Exception{
 	/**
-	 * code in(0=> DAO, 1 =>UserDAO, 2=>QuestionDAO, 3=> VideoDAO)
+	 * code in(0=> DAO, 1 =>UserDAO, 2=>QuestionDAO, 3=> CategoryDAO)
 	 */
 	public function __construct($message, $code = 0, Exception $previous = null) {
         parent::__construct($message, $code, $previous);
